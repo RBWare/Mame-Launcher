@@ -1,0 +1,19 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/background"
+    android:orientation="vertical"
+    tools:context=".Home">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/header_title"
+        android:textColor="@android:color/darker_gray"
+        android:textSize="26dip"
+        android:gravity="center_horizontal"
+        android:layout_marginTop="20dip"
+        />
+
+</LinearLayout>
