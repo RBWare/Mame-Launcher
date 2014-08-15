@@ -30,45 +30,82 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ScaleGestureDetector;
+import android.widget.ImageButton;
+import android.widget.Toast;
 
-public class Home extends Activity implements ScaleGestureDetector.OnScaleGestureListener, View.OnTouchListener {
-	ScaleGestureDetector mGesture;
-	/** Called when the activity is first created. */
-	@Override public void onCreate(Bundle state) {
-		super.onCreate(null);
-		mGesture = new ScaleGestureDetector(this, this);
-		findViewById(android.R.id.content).setOnTouchListener(this);
-	}
-	@Override public void onStop() {
-		super.onStop();
-		Process.sendSignal(Process.myPid(), 9);
-	}
-	@Override public void onBackPressed() {
-	}
-	@Override protected void onRestoreInstanceState(Bundle state) {
-	}
-	@Override protected void onSaveInstanceState(Bundle state) {
-	}
-	@Override public boolean onTouch(View v, MotionEvent e) {
-		return mGesture.onTouchEvent(e);
-	}
-	@Override public boolean onScale(ScaleGestureDetector gesture) {
-		boolean go = gesture.getScaleFactor() <= 0.5 || gesture.getScaleFactor() >= 1.5;
-		if (go) {
-			changeLauncher();
-		}
-		return go;
-	}
-	@Override public boolean onScaleBegin(ScaleGestureDetector gesture) {
-		return true;
-	}
-	@Override public void onScaleEnd(ScaleGestureDetector gesture) {
-	}
-	private void changeLauncher() {
-		getPackageManager().clearPackagePreferredActivities(getPackageName());
-		Intent i = new Intent(Intent.ACTION_MAIN);
-		i.addCategory(Intent.CATEGORY_HOME);
-		i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-		startActivity(i);
-	}
+public class Home extends Activity implements View.OnClickListener {
+
+    private ImageButton mArcadeButton;
+    private ImageButton mNintendoButton;
+    private ImageButton mSuperNintendoButton;
+    private ImageButton mSegaGenesisButton;
+    private ImageButton mAtariButton;
+    private ImageButton mGameboyButton;
+    private ImageButton mNintendo64Button;
+    private ImageButton mSettingsButton;
+
+    @Override public void onCreate(Bundle state) {
+        super.onCreate(state);
+        setContentView(R.layout.activity_home);
+
+        findViewById(R.id.main_button_mame).setOnClickListener(this);
+        findViewById(R.id.main_button_nes).setOnClickListener(this);
+        findViewById(R.id.main_button_snes).setOnClickListener(this);
+        findViewById(R.id.main_button_genesis).setOnClickListener(this);
+        findViewById(R.id.main_button_atari).setOnClickListener(this);
+        findViewById(R.id.main_button_gameboy).setOnClickListener(this);
+        findViewById(R.id.main_button_n64).setOnClickListener(this);
+        findViewById(R.id.main_button_settings).setOnClickListener(this);
+    }
+
+    @Override
+    public void onClick(View view) {
+        Intent intent;
+
+        // TODO - these all need to be accessed via sharedprefs for the exact package names, which can be changed via the settings menu
+
+        switch(view.getId()){
+            case R.id.main_button_mame:
+                Toast.makeText(this, "Mame", Toast.LENGTH_SHORT).show();
+                intent = getPackageManager().getLaunchIntentForPackage("com.package.address");
+                break;
+            case R.id.main_button_nes:
+                Toast.makeText(this, "main_button_nes", Toast.LENGTH_SHORT).show();
+                intent = getPackageManager().getLaunchIntentForPackage("com.package.address");
+
+                break;
+            case R.id.main_button_snes:
+                intent = getPackageManager().getLaunchIntentForPackage("com.bubblezapgames.supergnes_lite");
+                break;
+            case R.id.main_button_genesis:
+                Toast.makeText(this, "main_button_genesis", Toast.LENGTH_SHORT).show();
+                intent = getPackageManager().getLaunchIntentForPackage("com.package.address");
+
+                break;
+            case R.id.main_button_atari:
+                Toast.makeText(this, "main_button_atari", Toast.LENGTH_SHORT).show();
+                intent = getPackageManager().getLaunchIntentForPackage("com.package.address");
+
+                break;
+            case R.id.main_button_gameboy:
+                Toast.makeText(this, "main_button_gameboy", Toast.LENGTH_SHORT).show();
+                intent = getPackageManager().getLaunchIntentForPackage("com.package.address");
+
+                break;
+            case R.id.main_button_n64:
+                Toast.makeText(this, "main_button_n64", Toast.LENGTH_SHORT).show();
+                intent = getPackageManager().getLaunchIntentForPackage("com.package.address");
+
+                break;
+            case R.id.main_button_settings:
+                intent = new Intent(this, Settings.class);
+                break;
+            default:
+                intent = null;
+                break;
+        }
+
+        if (intent != null)
+            startActivity(intent);
+    }
 }
