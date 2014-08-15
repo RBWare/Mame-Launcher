@@ -1,4 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Null launcher</string>
+    <string name="app_name">Mame Launcher</string>
+    <string name="header_title">Ryan and Jenkins\' bad-ass fuck yeah video games</string>
+
+    <string name="settings">Settings</string>
+
+    <!--Console Names -->
+    <string name="mame_emulator">Arcade</string>
+    <string name="nes_emulator">Nintendo NES</string>
+    <string name="snes_emulator">Super Nintendo</string>
+    <string name="sega_genesis_emulator">Sega Genesis</string>
+    <string name="atari_emulator">Atari</string>
+    <string name="gameboy_emulator">Gameboy</string>
+    <string name="nintendo_64_emulator">Nintendo 64</string>
+    <string name="playstation_emulator">Playstation</string>
 </resources>

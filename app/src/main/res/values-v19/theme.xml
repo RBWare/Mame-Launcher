@@ -1,5 +1,5 @@
 <resources>
-	<style name="Theme" parent="@android:style/Theme.Holo.Wallpaper.NoTitleBar">
+	<style name="Theme" parent="@android:style/Theme.Holo.NoActionBar">
         <item name="android:windowTranslucentNavigation">true</item>
         <item name="android:windowTranslucentStatus">true</item>
 	</style>
