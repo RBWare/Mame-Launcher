@@ -5,6 +5,8 @@
 
     <string name="settings">Settings</string>
 
+    <string name="about_application">This application was written to be all that is awesome. Setup and designed to play all the best games ever made, so Ryan could pummel Jenkins like a little bitch. Also, Ryan is way more fucking awesome than Jenkins is. If you see Jenkins, please remind him how much better Ryan is.\n\n\nMurica.\n(&#169;) 2014. Fuck your rights.</string>
+
     <!--Console Names -->
     <string name="mame_emulator">Arcade</string>
     <string name="nes_emulator">Nintendo NES</string>
