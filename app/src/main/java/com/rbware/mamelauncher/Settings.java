@@ -26,11 +26,13 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Process;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
 import android.view.View;
@@ -43,6 +45,8 @@ public class Settings extends Activity implements View.OnClickListener {
 
     private PackageManager mPackageManager;
     private ArrayList<ApplicationInfo> mApplications;
+    private SharedPreferences mPreferences;
+    private static final String PREFS_FILE = "appPreferences";
 
 	@Override
     public void onCreate(Bundle state) {
@@ -69,14 +73,33 @@ public class Settings extends Activity implements View.OnClickListener {
     @Override
     public void onClick(View view) {
         switch (view.getId()){
-
             case R.id.settings_button_reboot:
-                //TODO Confirmation Dialog
+                showRebootDialog();
                 break;
             case R.id.settings_button_launch_application:
                 showApplicationListDialog();
                 break;
-            // TODO - Other buttons
+            case R.id.settings_button_change_atari:
+                showUpdateHandlerDialog("atari");
+                break;
+            case R.id.settings_button_change_gameboy:
+                showUpdateHandlerDialog("gba");
+                break;
+            case R.id.settings_button_change_genesis:
+                showUpdateHandlerDialog("genesis");
+                break;
+            case R.id.settings_button_change_mame:
+                showUpdateHandlerDialog("mame");
+                break;
+            case R.id.settings_button_change_n64:
+                showUpdateHandlerDialog("n64");
+                break;
+            case R.id.settings_button_change_nintendo:
+                showUpdateHandlerDialog("nes");
+                break;
+            case R.id.settings_button_change_snes:
+                showUpdateHandlerDialog("snes");
+                break;
             default:
                 // Nothing
                 break;
@@ -127,6 +150,74 @@ public class Settings extends Activity implements View.OnClickListener {
                     }
                 });
         builderSingle.show();
+    }
+
+    private void showUpdateHandlerDialog(final String key){
+        AlertDialog.Builder builderSingle = new AlertDialog.Builder(
+                this);
+        builderSingle.setIcon(R.drawable.ic_launcher);
+
+
+        final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(
+                this,
+                android.R.layout.select_dialog_item);
+
+        for (ApplicationInfo packageInfo : mApplications) {
+            arrayAdapter.add(packageInfo.loadLabel(mPackageManager).toString());
+        }
+        builderSingle.setNegativeButton("cancel",
+                new DialogInterface.OnClickListener() {
+
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+
+        builderSingle.setAdapter(arrayAdapter,
+                new DialogInterface.OnClickListener() {
+
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        updateApplicationHandler(key, mApplications.get(which).packageName);
+                    }
+                });
+        builderSingle.show();
+    }
+
+    private void showRebootDialog(){
+        DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                switch (which){
+                    case DialogInterface.BUTTON_POSITIVE:
+                        try {
+                            Runtime.getRuntime().exec(new String[]{"su","-c","reboot now"});
+                        } catch (Exception ex) {
+                            Log.i("Settings", "Could not reboot", ex);
+                        }
+                        break;
+
+                    case DialogInterface.BUTTON_NEGATIVE:
+                        dialog.dismiss();
+                        break;
+                }
+            }
+        };
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage("Do you want to reboot the system?").setPositiveButton("Yes", dialogClickListener)
+                .setNegativeButton("Cancel", dialogClickListener).show();
+    }
+
+    private void updateApplicationHandler(String key, String packageName){
+        mPreferences = getSharedPreferences(PREFS_FILE, MODE_PRIVATE);
+
+        if (mPreferences != null){
+            SharedPreferences.Editor edit = mPreferences.edit();
+            edit.putString(key, packageName);
+            edit.apply();
+        }
     }
 
     private boolean isSystemPackage(ApplicationInfo pkgInfo) {
